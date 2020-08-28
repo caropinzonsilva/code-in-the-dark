@@ -8,10 +8,11 @@
       <script>
         window.addEventListener('message', function(e) {
           if (
-            window.location.origin === 'file://' ||
-            window.location.origin === (e.origin || e.originalEvent.origin)
+            (window.location.origin === 'file://' ||
+              window.location.origin === (e.origin || e.originalEvent.origin))
+            && !!e.data.html
           ) {
-            document.documentElement.innerHTML = e.data
+            document.documentElement.innerHTML = e.data.html
           }
         })
       </script>

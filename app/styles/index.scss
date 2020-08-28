@@ -299,11 +299,8 @@ body.power-mode #editor {
   display: none;
   background: white;
   z-index: 35;
-  position: absolute;
   width: 100%;
   height: 100%;
-  top: 0;
-  left: 0;
 }
 
 body.power-mode {
@@ -393,3 +390,75 @@ body.power-mode {
   84.68% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
   100% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
 }
+
+.editor-container {
+  width: calc(100% - 600px);
+  height: 100%;
+  position: relative;
+  z-index: 0;
+}
+
+.preview {
+  position: absolute;
+  width: 300px;
+  height: 240px;
+  border: 1px solid #4effa1;
+
+  iframe {
+    width: 400%;
+    height: 400%;
+    transform: scale(0.25); 
+    transform-origin: 0 0;
+    background: white;
+  }
+}
+
+.preview--full {
+  width: 100% !important;
+  height: 100% !important;
+  top: 0 !important;
+  right: 0 !important;
+  z-index: 1;
+
+  iframe {
+    width: 100%;
+    height: 100%;
+    transform: scale(1); 
+  }
+}
+
+.preview--left {
+  right: 0;
+}
+
+.preview--right {
+  right: 300px;
+}
+
+.preview-toggle {
+  position: absolute;
+  top: 6px;
+  right: 12px;
+  cursor: pointer;
+}
+
+.preview-name {
+  position: absolute;
+  bottom: 0;
+  padding: 10px;
+  background: rgba(58, 147, 100, 0.75);
+}
+
+#preview-1, #preview-2 {
+  top: 0;
+}
+
+#preview-3, #preview-4 {
+  top: 240px;
+}
+
+#preview-5, #preview-6 {
+  top: 480px;
+}
+
+

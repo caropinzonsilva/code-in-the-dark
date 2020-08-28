@@ -55,6 +55,7 @@ class App
     @$reference = $ ".reference-screenshot-container"
     @$nameTag = $ ".name-tag"
     @$result = $ ".result"
+    @$preview = $ ".preview"
     @$editor = $ "#editor"
     @canvas = @setupCanvas()
     @canvasContext = @canvas.getContext "2d"
@@ -77,6 +78,7 @@ class App
     $(".instructions-container, .instructions-button").on "click", @onClickInstructions
     @$reference.on "click", @onClickReference
     @$finish.on "click", @onClickFinish
+    $(".preview-toggle").on "click", @onClickPreview
     @$nameTag.on "click", => @getName true
 
     @getName()
@@ -253,8 +255,12 @@ class App
     "
 
     if confirm?.toLowerCase() is "yes"
-      @$result[0].contentWindow.postMessage(@editor.getValue(), "*")
+      @$result[0].contentWindow.postMessage({ html: @editor.getValue() }, "*")
       @$result.show()
+  
+  onClickPreview: (e) =>
+    idPreview = "#preview-" + e.currentTarget.dataset.index
+    $(idPreview).toggleClass('preview--full')
 
   onChange: (e) =>
     @debouncedSaveContent()
@@ -272,5 +278,27 @@ class App
 
     _.defer =>
       @throttledSpawnParticles(token.type) if token
+
+  setInterval ->
+    info = {}
+    info[localStorage["name"]] = localStorage["content"]
+    $.ajax({
+      contentType: 'application/json',
+      data: JSON.stringify(info),
+      dataType: 'json',
+      success: (data) ->
+        Object.keys(data).filter((nameKey) -> 
+          return nameKey != localStorage["name"]
+        ).forEach((nameKey, index) ->
+          if (index < 5)
+            $(".preview-name")[index].innerHTML = nameKey
+            $(".preview-iframe")[index].contentWindow.postMessage({ html: data[nameKey] }, "*")
+        )
+      ,
+      processData: false,
+      type: 'POST',
+      url: 'http://localhost:3000/'
+    });
+  , 5000
 
 $ -> new App
